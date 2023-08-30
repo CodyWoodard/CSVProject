@@ -9,8 +9,10 @@ if __name__ == '__main__':
     Insta_Path = os.path.abspath('Instamonia.csv')
     Vanilla_Path = os.path.abspath('VanillaAndCanolaSpecialists.csv')
 
-    List_Of_Files = [Bobs_Path, Insta_Path, Vanilla_Path]  # Populating a list.
+    List_Of_Files = [Bobs_Path, Insta_Path, Vanilla_Path]  # Populating a list with the filepaths.
 
+    # path_stripper is a function that takes in my list of filepaths,
+    # extracts the filename, and populates a new list with the filename which will be used later.
     def path_stripper(List_Of_Files):
         i = 0
         Parsed_Filenames = []
