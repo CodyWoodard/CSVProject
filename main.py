@@ -39,6 +39,8 @@ if __name__ == '__main__':
             print(directory_name)
             i += 1
             # reading each csv file.
+            # Watched this video on reading and writing csv files in Python:
+            # https://www.youtube.com/watch?v=q5uM4VKywbA
             with open(directory_name, 'r') as csvfile:
                 csvreader = csv.reader(csvfile)
                 for line in csvreader:
@@ -46,6 +48,8 @@ if __name__ == '__main__':
 
         # Once I learn how to save columns to a list I will save the first column
         # In each csv file to be used later to populate my final csv fle.
+        # Taking inspiration from this solution on Stack overflow:
+        # https://stackoverflow.com/questions/22806792/append-columns-of-a-csv-file-to-lists
         columns = []
         for row in csv.reader(directory_name, delimiter=','):
             columns.append(row[0])
