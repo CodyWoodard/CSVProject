@@ -15,6 +15,7 @@ if __name__ == '__main__':
     # extracts the filename, and populates a new list with the filename which will be used later.
     def path_stripper(List_Of_Files):
         i = 0
+
         Parsed_Filenames = []
         for x in List_Of_Files:
             #
@@ -24,6 +25,8 @@ if __name__ == '__main__':
             # https://www.freecodecamp.org/news/python-strip-how-to-trim-a-string-or-line/
             stripped_path = directory_name.strip('.csv')  # Trimming .csv from the string.
             #print(stripped_path)
+
+
             Parsed_Filenames.append(stripped_path)  # Appending the suppliers name to a new list.
             #print(Parsed_Filenames[i])
             i += 1
@@ -32,19 +35,33 @@ if __name__ == '__main__':
 # Creating a method that will read & write csv files dynamically.
     def list_of_csv_file_file(List_Of_Files):
         i = 0
+
+
         import csv
+        import pandas as pd
         for x in List_Of_Files:
             # Getting my filename.csv assigned to directory_name
             parent_directory, directory_name = os.path.split(List_Of_Files[i])
             print(directory_name)
+            stripped_path = directory_name.strip('.csv')
             i += 1
+            filenameslist = []
+            filenameslist.append(stripped_path)
+
             # reading each csv file.
             # Watched this video on reading and writing csv files in Python:
             # https://www.youtube.com/watch?v=q5uM4VKywbA
             with open(directory_name, 'r') as csvfile:
                 csvreader = csv.reader(csvfile)
-                for line in csvreader:
-                    print(line)
+                with open('new' + directory_name, 'w') as csvOutput:
+                    newfile = csv.writer(csvOutput)
+                    for line in csvreader:
+                        newfile.writerow(line + filenameslist)
+            filenameslist.remove(stripped_path)
+
+
+
+
 
         # Once I learn how to save columns to a list I will save the first column
         # In each csv file to be used later to populate my final csv fle.
@@ -56,8 +73,8 @@ if __name__ == '__main__':
 
         return columns
 
-    print(list_of_csv_file_file(List_Of_Files))
-    #print(path_stripper(List_Of_Files))
+    print(list_of_csv_file_file(List_Of_Files, path_stripper(List_Of_Files)))
+    print(path_stripper(List_Of_Files,))
 
     #def organize_csv(List_of):
      #   columns = []
