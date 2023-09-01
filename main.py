@@ -32,11 +32,12 @@ if __name__ == '__main__':
             i += 1
         return Parsed_Filenames
 
+
 # Creating a method that will read & write csv files dynamically.
     def list_of_csv_file_file(List_Of_Files):
         i = 0
 
-
+        newcsvfiles = []
         import csv
         import pandas as pd
         for x in List_Of_Files:
@@ -56,9 +57,14 @@ if __name__ == '__main__':
                 with open('new' + directory_name, 'w') as csvOutput:
                     newfile = csv.writer(csvOutput)
                     for line in csvreader:
+                        # Appending the filename to a new column.
                         newfile.writerow(line + filenameslist)
+
+
+            newcsvfiles.append('new' + directory_name)
             filenameslist.remove(stripped_path)
 
+        return newcsvfiles
 
 
 
@@ -67,14 +73,33 @@ if __name__ == '__main__':
         # In each csv file to be used later to populate my final csv fle.
         # Taking inspiration from this solution on Stack overflow:
         # https://stackoverflow.com/questions/22806792/append-columns-of-a-csv-file-to-lists
-        columns = []
-        for row in csv.reader(directory_name, delimiter=','):
-            columns.append(row[0])
 
-        return columns
 
-    print(list_of_csv_file_file(List_Of_Files, path_stripper(List_Of_Files)))
+
+# Will use this method to save the desired data (SKU, PRICE, SUPLIER)
+    # from the current csv files, Write to one new one.
+    def organize_csvfiles(newcsvfiles):
+        # saved all items under the header PRICE using,
+        # https://www.geeksforgeeks.org/python-read-csv-columns-into-list/
+        import csv
+        i = 0
+        price = []
+        sku = []
+        for x in newcsvfiles:
+
+            filename = open(newcsvfiles[i], 'r')
+            file = csv.DictReader(filename)
+            for col in file:
+                price.append(col["PRICE"])
+                #sku.append(col[1])
+
+            i += 1
+            print(sku)
+        print(price)
+
+    print(list_of_csv_file_file(List_Of_Files,))
     print(path_stripper(List_Of_Files,))
+    print(organize_csvfiles(list_of_csv_file_file(List_Of_Files)))
 
     #def organize_csv(List_of):
      #   columns = []
