@@ -13,10 +13,13 @@ if __name__ == '__main__':
 
     # path_stripper is a function that takes in my list of filepaths,
     # extracts the filename, and populates a new list with the filename which will be used later.
-    def path_stripper(List_Of_Files):
+    def Organize_CSV(List_Of_Files):
         i = 0
+        import csv
+        import pandas as pd
 
         Parsed_Filenames = []
+        csvFilenames = []
         for x in List_Of_Files:
             #
             parent_directory, directory_name = os.path.split(List_Of_Files[i])
@@ -26,10 +29,58 @@ if __name__ == '__main__':
             stripped_path = directory_name.strip('.csv')  # Trimming .csv from the string.
             #print(stripped_path)
 
-
+            csvFilenames.append(directory_name)
             Parsed_Filenames.append(stripped_path)  # Appending the suppliers name to a new list.
             #print(Parsed_Filenames[i])
             i += 1
+
+        i = 0
+        j = 0
+        SKU = []
+        price = []
+
+        for x in List_Of_Files:
+            # Retrieving the first column in my new csv files.
+            df = pd.read_csv(List_Of_Files[j])
+            matrix2 = df[df.columns[0]]
+            SKU.append(matrix2.tolist())
+            # Retrieving the column  named 'PRICE' and appending to a list.
+            filename = open(List_Of_Files[i], 'r')
+            file = csv.DictReader(filename)
+            for col in file:
+                price.append(col["PRICE"])
+                # sku.append(col[1])
+
+            i += 1
+        k = 0
+        for x in List_Of_Files:
+            csvInfo = []
+            newSKU = []
+            newPrice = []
+            addName = []
+            #newPrice.append(price[i])
+            #newSKU.append(SKU[i])
+            addName.append(Parsed_Filenames[k])
+            #directory_name = csvFilenames[i]
+            # reading each csv file.
+            # Watched this video on reading and writing csv files in Python:
+            # https://www.youtube.com/watch?v=q5uM4VKywbA
+
+            # Rather than adding to a Csv file,
+            # this is erasing the new file each iteration and rewriting.
+            with open(directory_name, 'r') as csvfile:
+                csvreader = csv.reader(csvfile)
+                with open('newFile', 'w') as csvOutput:
+                    newfile = csv.writer(csvOutput)
+                    for row in csvreader:
+
+                        newfile.writerow(row + addName)
+
+        k += 1
+        print(SKU)
+        print(price)
+        print(addName)
+        print(csvInfo)
         return Parsed_Filenames
 
 
@@ -78,28 +129,16 @@ if __name__ == '__main__':
 
 # Will use this method to save the desired data (SKU, PRICE, SUPLIER)
     # from the current csv files, Write to one new one.
-    def organize_csvfiles(newcsvfiles):
+    #def organize_csvfiles(newcsvfiles):
         # saved all items under the header PRICE using,
         # https://www.geeksforgeeks.org/python-read-csv-columns-into-list/
-        import csv
-        i = 0
-        price = []
-        sku = []
-        for x in newcsvfiles:
+     #   import csv
+      #  import pandas as pd
 
-            filename = open(newcsvfiles[i], 'r')
-            file = csv.DictReader(filename)
-            for col in file:
-                price.append(col["PRICE"])
-                #sku.append(col[1])
 
-            i += 1
-            print(sku)
-        print(price)
-
-    print(list_of_csv_file_file(List_Of_Files,))
-    print(path_stripper(List_Of_Files,))
-    print(organize_csvfiles(list_of_csv_file_file(List_Of_Files)))
+    #print(list_of_csv_file_file(List_Of_Files,))
+    print(Organize_CSV(List_Of_Files,))
+    #print(organize_csvfiles(list_of_csv_file_file(List_Of_Files)))
 
     #def organize_csv(List_of):
      #   columns = []
