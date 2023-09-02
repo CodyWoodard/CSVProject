@@ -11,9 +11,10 @@ if __name__ == '__main__':
     Bobs_Path = os.path.abspath('BobsParts.csv')
     Insta_Path = os.path.abspath('Instamonia.csv')
     Vanilla_Path = os.path.abspath('VanillaAndCanolaSpecialists.csv')
+    Test_Path = os.path.abspath('Test.csv')
     #Test_Path = os.path.abspath('Test.csv')
 
-    List_Of_Files = [Bobs_Path, Insta_Path, Vanilla_Path]  # Populating a list with the filepaths.
+    List_Of_Files = [Bobs_Path, Insta_Path, Vanilla_Path, Test_Path]  # Populating a list with the filepaths.
     #print(Bobs_Path)
     # path_stripper is a function that takes in my list of filepaths,
     # extracts the filename, and populates a new list with the filename which will be used later.
@@ -24,18 +25,24 @@ if __name__ == '__main__':
         newfile.writeheader()
 
 
+
     def Organize_CSV(List_Of_Files):
         i = 0
         import csv
         import pandas as pd
 
-        Parsed_Filenames = []
-        csvFilenames = []
+
         SKU = []
         price = []
         addName = []
+        Parsed_Filenames = []
+        csvFilenames = []
+
+
+
+
         for x in List_Of_Files:
-            #
+
             parent_directory, directory_name = os.path.split(List_Of_Files[i])
             print(directory_name)
             # Learning about the strip method:
@@ -58,8 +65,14 @@ if __name__ == '__main__':
             for col in file:
                 price.append(col["PRICE"])
 
+
+
+
+
             newSKU = df[df.columns[0]].values.tolist()
             SKU.extend(newSKU)
+            for l in newSKU:
+                addName.append(stripped_path)
             #for col in file:
              #   SKU.append(col['PN'])
 
@@ -69,7 +82,7 @@ if __name__ == '__main__':
 
             #newPrice.append(price[i])
             #newSKU.append(SKU[i])
-            addName.append(Parsed_Filenames[i])
+            #addName.append(Parsed_Filenames[i])
             # directory_name = csvFilenames[k]
             # reading each csv file.
             # Watched this video on reading and writing csv files in Python:
@@ -105,7 +118,7 @@ if __name__ == '__main__':
         print(addName)
         #print(List_Of_Files)
         ExtractedData = [SKU, price, addName]
-        dict = {'SKU': SKU, 'PRICE': price}
+        dict = {'SKU': SKU, 'PRICE': price,'SUPPLIER': addName}  #
         df = pd.DataFrame(dict)
         df.to_csv('newFile.csv')
         #i = 0
@@ -206,6 +219,7 @@ if __name__ == '__main__':
 
     #print(list_of_csv_file_file(List_Of_Files,))
     print(Organize_CSV(List_Of_Files))
+
     #print(organize_csvfiles(list_of_csv_file_file(List_Of_Files)))
 
     #def organize_csv(List_of):
