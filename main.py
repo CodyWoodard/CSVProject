@@ -3,16 +3,27 @@
 if __name__ == '__main__':
 
     import os
+    import csv
+    import pandas as pd
+    from csv import writer
     # This block of code was built using:
     # https://stackoverflow.com/questions/10149263/extract-a-part-of-the-filepath-a-directory-in-python
     Bobs_Path = os.path.abspath('BobsParts.csv')
     Insta_Path = os.path.abspath('Instamonia.csv')
     Vanilla_Path = os.path.abspath('VanillaAndCanolaSpecialists.csv')
+    #Test_Path = os.path.abspath('Test.csv')
 
     List_Of_Files = [Bobs_Path, Insta_Path, Vanilla_Path]  # Populating a list with the filepaths.
-
+    #print(Bobs_Path)
     # path_stripper is a function that takes in my list of filepaths,
     # extracts the filename, and populates a new list with the filename which will be used later.
+    headerlist = ['SKU', 'PRICE', 'SUPPLIER']
+
+    with open('newFile.csv', 'w', newline='') as csvOutput:
+        newfile = csv.DictWriter(csvOutput, delimiter=',', fieldnames=headerlist)
+        newfile.writeheader()
+
+
     def Organize_CSV(List_Of_Files):
         i = 0
         import csv
@@ -20,10 +31,13 @@ if __name__ == '__main__':
 
         Parsed_Filenames = []
         csvFilenames = []
+        SKU = []
+        price = []
+        addName = []
         for x in List_Of_Files:
             #
             parent_directory, directory_name = os.path.split(List_Of_Files[i])
-            #print(directory_name)
+            print(directory_name)
             # Learning about the strip method:
             # https://www.freecodecamp.org/news/python-strip-how-to-trim-a-string-or-line/
             stripped_path = directory_name.strip('.csv')  # Trimming .csv from the string.
@@ -32,17 +46,9 @@ if __name__ == '__main__':
             csvFilenames.append(directory_name)
             Parsed_Filenames.append(stripped_path)  # Appending the suppliers name to a new list.
             #print(Parsed_Filenames[i])
-            i += 1
-
-        i = 0
-        j = 0
-        SKU = []
-        price = []
-
-        for x in List_Of_Files:
-            # Retrieving the first column in my new csv files.
-            df = pd.read_csv(List_Of_Files[j])
+            df = pd.read_csv(List_Of_Files[i])
             matrix2 = df[df.columns[0]]
+
             SKU.append(matrix2.tolist())
             # Retrieving the column  named 'PRICE' and appending to a list.
             filename = open(List_Of_Files[i], 'r')
@@ -51,37 +57,95 @@ if __name__ == '__main__':
                 price.append(col["PRICE"])
                 # sku.append(col[1])
 
-            i += 1
-        k = 0
-        for x in List_Of_Files:
             csvInfo = []
-            newSKU = []
-            newPrice = []
-            addName = []
+            #newSKU = []
+            #newPrice = []
+
             #newPrice.append(price[i])
             #newSKU.append(SKU[i])
-            addName.append(Parsed_Filenames[k])
-            #directory_name = csvFilenames[i]
+            addName.append(Parsed_Filenames[i])
+            # directory_name = csvFilenames[k]
             # reading each csv file.
             # Watched this video on reading and writing csv files in Python:
             # https://www.youtube.com/watch?v=q5uM4VKywbA
 
             # Rather than adding to a Csv file,
             # this is erasing the new file each iteration and rewriting.
-            with open(directory_name, 'r') as csvfile:
-                csvreader = csv.reader(csvfile)
-                with open('newFile', 'w') as csvOutput:
-                    newfile = csv.writer(csvOutput)
-                    for row in csvreader:
+            #from csv import writer
+            #print(directory_name)
+            #with open(directory_name, 'r') as csvfile:
+             #   csvreader = csv.reader(csvfile)
+              #  rows = list(csvreader)
+                #next(csvreader, None)
 
-                        newfile.writerow(row + addName)
+            #for row in rows:
+             #   row.append(price)
 
-        k += 1
+            #with open('newFile.csv', 'w', newline='') as f:
+             #   writer = csv.writer(f)
+              #  writer.writerow(rows[3])
+
+            # with open('newFile.csv', 'a') as fileObject:
+                   # writerObject = writer(fileObject)
+                    #for row in csvreader:
+                     #   writerObject.writerow(row + addName)
+                      #  print(row)
+
+            i += 1
+
+
         print(SKU)
         print(price)
         print(addName)
-        print(csvInfo)
-        return Parsed_Filenames
+        ExtractedData = [SKU, price, addName]
+        rows1 = SKU
+        rows2 = price
+        rows3 = addName
+        with open('newFile.csv', 'w') as f:
+            csvwriter = csv.writer(f)
+            csvwriter.writerows(rows1 + rows2 + rows3)
+        #i = 0
+        #j = 0
+
+
+        #for x in List_Of_Files:
+            # Retrieving the first column in my new csv files.
+
+         #   i += 1
+        #k = 0
+
+        #print(directory_name)
+        #for x in Parsed_Filenames:
+
+         #   with open('newFile.csv', 'a') as fileObject:
+          #      writerObject = writer(fileObject)
+
+           #     for row in newfile.csv:
+            #        writerObject.writerow(row + addName)
+
+
+
+            #with open('newFile.csv', 'a') as fileObject:
+             #   writerobject = writer(fileObject)
+              #  for row in csvreader:
+
+        #for x in List_Of_Files[k-1]:
+         #   from csv import writer
+          #  with open('newFile.csv', 'a') as fileObject:
+
+           #     writerObject = writer(fileObject)
+            #    writerObject.writerow(row + addName)
+             #   fileObject.close()
+
+        #k += 1
+
+
+        #print(row)
+        #print(SKU)
+        #print(price)
+        #print(addName)
+        #print(csvInfo)
+        return ExtractedData
 
 
 # Creating a method that will read & write csv files dynamically.
@@ -137,7 +201,7 @@ if __name__ == '__main__':
 
 
     #print(list_of_csv_file_file(List_Of_Files,))
-    print(Organize_CSV(List_Of_Files,))
+    print(Organize_CSV(List_Of_Files))
     #print(organize_csvfiles(list_of_csv_file_file(List_Of_Files)))
 
     #def organize_csv(List_of):
