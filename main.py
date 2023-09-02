@@ -13,7 +13,7 @@ if __name__ == '__main__':
     Vanilla = 'VanillaAndCanolaSpecialists.csv'
     # There are some instances when my test file doesn't cooperate.
     # Adding multiple columns in different places within the same file ie: if I combine BobsParts, Instamonia &
-    # Vanilla, my price column doesn't populate properly.
+    # Vanilla to my Test.csv file, my price column doesn't populate properly.
     # I suspect it has something to do with the column that price is in being out of order.
     # I left it in for you to look at.
     # PRICE is in the 4th column on BobsParts & Insta, but the second on Vanilla.
@@ -29,7 +29,7 @@ if __name__ == '__main__':
         # Downloaded and installed Pandas to be used for the data within this script.
         import pandas as pd
 
-        # Setting up some lists to be populated with SKUs, prices and supplier names..
+        # Setting up some lists to be populated with SKUs, prices and supplier names.
         SKU = []
         price = []
         addName = []
@@ -84,7 +84,10 @@ if __name__ == '__main__':
         # Adding to the dataframe.
         df = pd.DataFrame(dict)
         # Writing to csv.
+        # Setting SKU as my index, which removes the indexing column that was before my data.
+        df = df.set_index('SKU')
         df.to_csv('newFile.csv')
+
 
         return "Done, check out 'newFile.csv'"
 
