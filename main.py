@@ -1,57 +1,53 @@
 # Familiarizing myself with csv.reader/writer in Python. Received this from
 # Pythons docs @ https://docs.python.org/3/library/csv.html
+
 if __name__ == '__main__':
 
     import os
     import csv
     import pandas as pd
     from csv import writer
-    # This block of code was built using:
-    # https://stackoverflow.com/questions/10149263/extract-a-part-of-the-filepath-a-directory-in-python
-    Bobs_Path = os.path.abspath('BobsParts.csv')
-    Insta_Path = os.path.abspath('Instamonia.csv')
-    Vanilla_Path = os.path.abspath('VanillaAndCanolaSpecialists.csv')
-    Test_Path = os.path.abspath('Test.csv')
-    #Test_Path = os.path.abspath('Test.csv')
+    # Assigning csv filenames to variables
+    Bobs = 'BobsParts.csv'
+    Insta = 'Instamonia.csv'
+    Vanilla = 'VanillaAndCanolaSpecialists.csv'
+    # There are some instances when my test file doesn't cooperate.
+    # Adding multiple columns in different places within the same file ie: if I combine BobsParts, Instamonia &
+    # Vanilla, my price column doesn't populate properly.
+    # I suspect it has something to do with the column that price is in being out of order.
+    # I left it in for you to look at.
+    # PRICE is in the 4th column on BobsParts & Insta, but the second on Vanilla.
+    Test = 'Test.csv'
 
-    List_Of_Files = [Bobs_Path, Insta_Path, Vanilla_Path, Test_Path]  # Populating a list with the filepaths.
-    #print(Bobs_Path)
-    # path_stripper is a function that takes in my list of filepaths,
-    # extracts the filename, and populates a new list with the filename which will be used later.
-    headerlist = ['SKU', 'PRICE', 'SUPPLIER']
-
-    with open('newFile.csv', 'w', newline='') as csvOutput:
-        newfile = csv.DictWriter(csvOutput, delimiter=',', fieldnames=headerlist)
-        newfile.writeheader()
+    List_Of_Files = [Bobs, Insta, Vanilla, Test]  # Populating a list with the csv files.
 
 
-
-    def Organize_CSV(List_Of_Files):
+    def Organize_CSV(listoffiles):
+        # Using i as an iterative variable within my method.
         i = 0
         import csv
+        # Downloaded and installed Pandas to be used for the data within this script.
         import pandas as pd
 
-
+        # Setting up some lists to be populated with SKUs, prices and supplier names..
         SKU = []
         price = []
         addName = []
-        Parsed_Filenames = []
-        csvFilenames = []
 
 
 
 
-        for x in List_Of_Files:
+        for x in listoffiles:
 
-            parent_directory, directory_name = os.path.split(List_Of_Files[i])
-            print(directory_name)
+            file_name = List_Of_Files[i]
+
             # Learning about the strip method:
             # https://www.freecodecamp.org/news/python-strip-how-to-trim-a-string-or-line/
-            stripped_path = directory_name.strip('.csv')  # Trimming .csv from the string.
+            stripped_path = file_name.strip('.csv')  # Trimming .csv from the string.
             #print(stripped_path)
 
-            csvFilenames.append(directory_name)
-            Parsed_Filenames.append(stripped_path)  # Appending the suppliers name to a new list.
+            #csvFilenames.append(directory_name)
+            #Parsed_Filenames.append(stripped_path)  # Appending the suppliers name to a new list.
             #print(Parsed_Filenames[i])
             df = pd.read_csv(List_Of_Files[i])
             #SKU = df.iloc[:0]
