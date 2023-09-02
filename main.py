@@ -47,15 +47,21 @@ if __name__ == '__main__':
             Parsed_Filenames.append(stripped_path)  # Appending the suppliers name to a new list.
             #print(Parsed_Filenames[i])
             df = pd.read_csv(List_Of_Files[i])
-            matrix2 = df[df.columns[0]]
-
-            SKU.append(matrix2.tolist())
+            #SKU = df.iloc[:0]
+            #df[df.columns[0]]
+            #df = pd.read_csv(List_Of_Files[i])
+            #matrix2 = df[df.columns[0]]
+            #SKU.append(matrix2.tolist())
             # Retrieving the column  named 'PRICE' and appending to a list.
             filename = open(List_Of_Files[i], 'r')
             file = csv.DictReader(filename)
             for col in file:
                 price.append(col["PRICE"])
-                # sku.append(col[1])
+
+            newSKU = df[df.columns[0]].values.tolist()
+            SKU.extend(newSKU)
+            #for col in file:
+             #   SKU.append(col['PN'])
 
             csvInfo = []
             #newSKU = []
@@ -97,13 +103,11 @@ if __name__ == '__main__':
         print(SKU)
         print(price)
         print(addName)
+        #print(List_Of_Files)
         ExtractedData = [SKU, price, addName]
-        rows1 = SKU
-        rows2 = price
-        rows3 = addName
-        with open('newFile.csv', 'w') as f:
-            csvwriter = csv.writer(f)
-            csvwriter.writerows(rows1 + rows2 + rows3)
+        dict = {'SKU': SKU, 'PRICE': price}
+        df = pd.DataFrame(dict)
+        df.to_csv('newFile.csv')
         #i = 0
         #j = 0
 
