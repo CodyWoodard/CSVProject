@@ -16,7 +16,7 @@ if __name__ == '__main__':
     List_Of_Files = [Bobs, Insta, Vanilla, Test]  # Populating a list with the csv files.
 
 
-    def Organize_CSV(listoffiles):
+    def Organize_CSV(list_of_files):
         # Using i as an iterative variable within my method.
         i = 0
         import csv
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
 
 
-        for x in listoffiles:
+        for x in list_of_files:
             # Grabbing the filename each time my loop iterates.
             file_name = List_Of_Files[i]
 
