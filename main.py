@@ -38,188 +38,55 @@ if __name__ == '__main__':
 
 
         for x in listoffiles:
-
+            # Grabbing the filename each time my loop iterates.
             file_name = List_Of_Files[i]
 
-            # Learning about the strip method:
+            # Strip method:
             # https://www.freecodecamp.org/news/python-strip-how-to-trim-a-string-or-line/
             stripped_path = file_name.strip('.csv')  # Trimming .csv from the string.
-            #print(stripped_path)
 
-            #csvFilenames.append(directory_name)
-            #Parsed_Filenames.append(stripped_path)  # Appending the suppliers name to a new list.
-            #print(Parsed_Filenames[i])
+            # I am reading in my csv files and assigning them to df.
             df = pd.read_csv(List_Of_Files[i])
-            #SKU = df.iloc[:0]
-            #df[df.columns[0]]
-            #df = pd.read_csv(List_Of_Files[i])
-            #matrix2 = df[df.columns[0]]
-            #SKU.append(matrix2.tolist())
-            # Retrieving the column  named 'PRICE' and appending to a list.
-            filename = open(List_Of_Files[i], 'r')
-            file = csv.DictReader(filename)
-            for col in file:
-                price.append(col["PRICE"])
-
-
-
-
-
+            # newSKU is a list to hold the contents of column[0] (SKUs), however, without the
+            # .values method I couldn't write the contents of newSKU to a new file correctly
+            # because I was creating a list of lists, when I only needed the values of column 0 to populate a list
+            # at each iteration.
             newSKU = df[df.columns[0]].values.tolist()
+            # The append method wouldn't work here because of the list of lists issue. Once I figured out that I could
+            # use .extend instead of append my newFile started populating correctly.
             SKU.extend(newSKU)
+
+            # I used a simple for loop to give me an iteration of lines in each file,
+            # (if the file had 13 lines in BobsParts, than BobsParts was loaded into the addName list 13 times.)
+            # Used later in the program to write to a new csv file.
             for l in newSKU:
                 addName.append(stripped_path)
-            #for col in file:
-             #   SKU.append(col['PN'])
 
-            csvInfo = []
-            #newSKU = []
-            #newPrice = []
-
-            #newPrice.append(price[i])
-            #newSKU.append(SKU[i])
-            #addName.append(Parsed_Filenames[i])
-            # directory_name = csvFilenames[k]
-            # reading each csv file.
-            # Watched this video on reading and writing csv files in Python:
-            # https://www.youtube.com/watch?v=q5uM4VKywbA
-
-            # Rather than adding to a Csv file,
-            # this is erasing the new file each iteration and rewriting.
-            #from csv import writer
-            #print(directory_name)
-            #with open(directory_name, 'r') as csvfile:
-             #   csvreader = csv.reader(csvfile)
-              #  rows = list(csvreader)
-                #next(csvreader, None)
-
-            #for row in rows:
-             #   row.append(price)
-
-            #with open('newFile.csv', 'w', newline='') as f:
-             #   writer = csv.writer(f)
-              #  writer.writerow(rows[3])
-
-            # with open('newFile.csv', 'a') as fileObject:
-                   # writerObject = writer(fileObject)
-                    #for row in csvreader:
-                     #   writerObject.writerow(row + addName)
-                      #  print(row)
+            # I am certain there is a better way to do this using Pandas, but this does work.
+            # Reading the csv file in and assigning it to fileObject.
+            fileObject = open(List_Of_Files[i], 'r')
+            # DictReader is mapping the information in each row to a dict,
+            # whose keys are given by the optional fieldnames parameter.
+            # https://docs.python.org/3/library/csv.html#csv.DictReader
+            # https://www.geeksforgeeks.org/python-read-csv-columns-into-list/
+            file = csv.DictReader(fileObject)
+            for col in file:
+                # Retrieving the column  named 'PRICE' and appending to the price list.
+                price.append(col["PRICE"])
 
             i += 1
 
+        # Created a dictionary with my lists
+        # https://www.geeksforgeeks.org/python-save-list-to-csv/
+        # Okay, 'SKU' 'PRICE' & 'SUPPLIER' are my keys, which will be used to populate the corresponding columns.
 
-        print(SKU)
-        print(price)
-        print(addName)
-        #print(List_Of_Files)
-        ExtractedData = [SKU, price, addName]
-        dict = {'SKU': SKU, 'PRICE': price,'SUPPLIER': addName}  #
+        dict = {'SKU': SKU, 'PRICE': price,'SUPPLIER': addName}
+        # Adding to the dataframe.
         df = pd.DataFrame(dict)
+        # Writing to csv.
         df.to_csv('newFile.csv')
-        #i = 0
-        #j = 0
 
+        return "Done, check out 'newFile.csv'"
 
-        #for x in List_Of_Files:
-            # Retrieving the first column in my new csv files.
-
-         #   i += 1
-        #k = 0
-
-        #print(directory_name)
-        #for x in Parsed_Filenames:
-
-         #   with open('newFile.csv', 'a') as fileObject:
-          #      writerObject = writer(fileObject)
-
-           #     for row in newfile.csv:
-            #        writerObject.writerow(row + addName)
-
-
-
-            #with open('newFile.csv', 'a') as fileObject:
-             #   writerobject = writer(fileObject)
-              #  for row in csvreader:
-
-        #for x in List_Of_Files[k-1]:
-         #   from csv import writer
-          #  with open('newFile.csv', 'a') as fileObject:
-
-           #     writerObject = writer(fileObject)
-            #    writerObject.writerow(row + addName)
-             #   fileObject.close()
-
-        #k += 1
-
-
-        #print(row)
-        #print(SKU)
-        #print(price)
-        #print(addName)
-        #print(csvInfo)
-        return ExtractedData
-
-
-# Creating a method that will read & write csv files dynamically.
-    def list_of_csv_file_file(List_Of_Files):
-        i = 0
-
-        newcsvfiles = []
-        import csv
-        import pandas as pd
-        for x in List_Of_Files:
-            # Getting my filename.csv assigned to directory_name
-            parent_directory, directory_name = os.path.split(List_Of_Files[i])
-            print(directory_name)
-            stripped_path = directory_name.strip('.csv')
-            i += 1
-            filenameslist = []
-            filenameslist.append(stripped_path)
-
-            # reading each csv file.
-            # Watched this video on reading and writing csv files in Python:
-            # https://www.youtube.com/watch?v=q5uM4VKywbA
-            with open(directory_name, 'r') as csvfile:
-                csvreader = csv.reader(csvfile)
-                with open('new' + directory_name, 'w') as csvOutput:
-                    newfile = csv.writer(csvOutput)
-                    for line in csvreader:
-                        # Appending the filename to a new column.
-                        newfile.writerow(line + filenameslist)
-
-
-            newcsvfiles.append('new' + directory_name)
-            filenameslist.remove(stripped_path)
-
-        return newcsvfiles
-
-
-
-
-        # Once I learn how to save columns to a list I will save the first column
-        # In each csv file to be used later to populate my final csv fle.
-        # Taking inspiration from this solution on Stack overflow:
-        # https://stackoverflow.com/questions/22806792/append-columns-of-a-csv-file-to-lists
-
-
-
-# Will use this method to save the desired data (SKU, PRICE, SUPLIER)
-    # from the current csv files, Write to one new one.
-    #def organize_csvfiles(newcsvfiles):
-        # saved all items under the header PRICE using,
-        # https://www.geeksforgeeks.org/python-read-csv-columns-into-list/
-     #   import csv
-      #  import pandas as pd
-
-
-    #print(list_of_csv_file_file(List_Of_Files,))
     print(Organize_CSV(List_Of_Files))
-
-    #print(organize_csvfiles(list_of_csv_file_file(List_Of_Files)))
-
-    #def organize_csv(List_of):
-     #   columns = []
-      #  for row in csv.reader(infile, delimiter="\t"):
-       #     columns.append(row[1])  # here row[1] is the second column
 
