@@ -11,12 +11,6 @@ if __name__ == '__main__':
     Bobs = 'BobsParts.csv'
     Insta = 'Instamonia.csv'
     Vanilla = 'VanillaAndCanolaSpecialists.csv'
-    # There are some instances when my test file doesn't cooperate.
-    # Adding multiple columns in different places within the same file ie: if I combine BobsParts, Instamonia &
-    # Vanilla to my Test.csv file, my price column doesn't populate properly.
-    # I suspect it has something to do with the column that price is in being out of order.
-    # I left it in for you to look at.
-    # PRICE is in the 4th column on BobsParts & Insta, but the second on Vanilla.
     Test = 'Test.csv'
 
     List_Of_Files = [Bobs, Insta, Vanilla, Test]  # Populating a list with the csv files.
