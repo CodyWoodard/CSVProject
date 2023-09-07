@@ -10,6 +10,7 @@ if __name__ == '__main__':
     import glob
     import pyodbc
 
+
     received_files = []
     # Using os.chdir to change the current working directory to 'Received Files'
     # https://stackoverflow.com/questions/39838332
@@ -96,16 +97,46 @@ if __name__ == '__main__':
     print('Opening acess..')
     print(pyodbc.drivers())
 
-    import os
+    #import os
     newfile = []
     print(os.getcwd())
     os.chdir("..")
     os.chdir('Final CSV File')
 
 
-    df = pd.read_csv('newFile.csv')
+    new_csv_data = pd.read_csv('newFile.csv')
+    df = pd.DataFrame(new_csv_data)
     print(df.head())
-    conn = pyodbc.connect(Trusted_Connection="Yes", Driver='ODBC Driver 17 for SQL Server',
-                          Server="WOODYFOSHO\MY_TEST_INSTANCE", Database="test")
+    # After getting my SQL Server set up I used Boltic & W3 to connect to my database using Python:
+    # https://www.boltic.io/blog/python-connect-to-sql-server
+    # https://www.w3schools.com/sql/sql_create_table.asp
+    conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
+                      'SERVER=WOODYFOSHO\\MY_TEST_INSTANCE;'
+                      'DATABASE=Test;'
+                      'Trusted_Connection=yes;')
+
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE Product")
+    #SQLString = "CREATE TABLE Product (ID varchar(20))"
+    #insert statement, for loop
+
+    if cursor.tables(table='Product', tableType='TABLE').fetchone():
+        print('exists')
+
+    else:
+        cursor.execute('''
+                    CREATE TABLE Products (
+                        SKU varchar(20),
+                        PRICE varchar(20),
+                        SUPPLIER varchar(30))''')
+        for row in df.itertuples():
+            cursor.execute(''' INSERT INTO Products (SKU, PRICE, SUPPLIER)
+            VALUES (?,?,?)''',row.SKU, row.PRICE, row.SUPPLIER)
+
+    if cursor.tables(table='TableName', tableType='TABLE').fetchone():
+        print("exists")
+
+    conn.commit()
+    cursor.close()
+
+
+
