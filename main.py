@@ -8,7 +8,7 @@ if __name__ == '__main__':
     import os
     # Will be using glob to retrieve files/pathnames '.csv'
     import glob
-    #import pyodbc
+    import pyodbc
 
     received_files = []
     # Using os.chdir to change the current working directory to 'Received Files'
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         # Appending the files to the list 'fileList'
         received_files.append(files)
 
-    print(received_files)
+    #print(received_files)
 
     def Organize_CSV(received_files):
         # Using i as an iterative variable within my method.
@@ -33,6 +33,7 @@ if __name__ == '__main__':
         SKU = []
         price = []
         addName = []
+
 
         for x in received_files:
             # Grabbing the filename each time my loop iterates.
@@ -87,10 +88,24 @@ if __name__ == '__main__':
 
 
 
-        return "Done, check out 'newFile.csv'"
-    #pyodbc.drivers()
+        return 'Hello'
 
-    #con = pyodbc.connect(Trusted_Connection = "Yes",)
+
+
     print(Organize_CSV(received_files))
     print('Opening acess..')
+    print(pyodbc.drivers())
 
+    import os
+    newfile = []
+    print(os.getcwd())
+    os.chdir("..")
+    os.chdir('Final CSV File')
+
+
+    df = pd.read_csv('newFile.csv')
+    print(df.head())
+    conn = pyodbc.connect(Trusted_Connection="Yes", Driver='ODBC Driver 17 for SQL Server',
+                          Server="WOODYFOSHO\MY_TEST_INSTANCE", Database="test")
+    cursor = conn.cursor()
+    cursor.execute("CREATE TABLE Product")
